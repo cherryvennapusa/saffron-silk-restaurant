@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saffron & Silk | Royal Indian Cuisine Menu</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        saffron: {
+                            50: '#fffbeed',
+                            100: '#fef3c7',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                        },
+                        emeraldRoyal: '#064e3b',
+                        creamBG: '#faf7f2',
+                        cardDark: '#1c1917',
+                        goldAccent: '#d4af37'
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #faf7f2;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #292524;
+        }
+
+        .font-playfair {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d97706;
+            border-radius: 4px;
+        }
+
+        /* Veg / Non-Veg Standard Indicators */
+        .veg-symbol {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #16a34a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+            background: white;
+        }
+        .veg-symbol::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background-color: #16a34a;
+            border-radius: 50%;
+        }
+
+        .non-veg-symbol {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #dc2626;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+            background: white;
+        }
+        .non-veg-symbol::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 9px solid #dc2626;
+        }
+
+        .glass-header {
+            background: rgba(250, 247, 242, 0.92);
+            backdrop-filter: blur(12px);
+        }
+
+        /* Gold Shimmer effect */
+        .gold-shimmer {
+            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Active tab underline transition */
+        .tab-btn.active {
+            color: #d97706;
+            border-bottom-color: #d97706;
+            background-color: #fef3c7;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-saffron-500 selection:text-white">
+
+    <!-- Sticky Top Navigation -->
+    <header class="sticky top-0 z-40 glass-header border-b border-stone-200 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo & Branding -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="resetFilters()">
+                    <div class="w-11 h-11 rounded-full bg-stone-900 text-saffron-500 flex items-center justify-center text-xl shadow-lg border border-saffron-500/30">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-bold font-playfair tracking-wide text-stone-900 block leading-tight">Saffron & Silk</span>
+                        <span class="text-xs uppercase tracking-widest text-saffron-700 font-semibold">Gourmet Indian Kitchen</span>
+                    </div>
+                </div>
+
+                <!-- Central Search Bar (Desktop) -->
+                <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"></i>
+                    <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Search Butter Chicken, Naan, Biryani..." 
+                        class="w-full pl-11 pr-4 py-2.5 bg-white border border-stone-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-saffron-500 focus:border-transparent transition-all shadow-sm">
+                    <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-4 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Right Action Icons & Cart Badge -->
+                <div class="flex items-center space-x-3 sm:space-x-4">
+                    <!-- Thali Builder Quick Launcher -->
+                    <button onclick="openThaliModal()" class="hidden sm:flex items-center space-x-2 bg-gradient-to-r from-amber-600 to-saffron-600 text-white px-4 py-2 rounded-full font-medium text-xs sm:text-sm hover:shadow-lg transition-all hover:scale-105 active:scale-95">
+                        <i class="fa-solid fa-drumstick-bite"></i>
+                        <span>Build Custom Thali</span>
+                    </button>
+
+                    <!-- Cart Drawer Trigger Button -->
+                    <button onclick="toggleCartDrawer()" class="relative bg-stone-900 text-white p-3 rounded-full hover:bg-stone-800 transition-all flex items-center justify-center shadow-md">
+                        <i class="fa-solid fa-bag-shopping text-lg"></i>
+                        <span id="cartBadge" class="absolute -top-1 -right-1 bg-saffron-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center shadow border-2 border-white scale-0 transition-transform duration-200">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Search Bar -->
+            <div class="md:hidden pb-4 pt-1">
+                <div class="relative w-full">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"></i>
+                    <input type="text" id="mobileSearchInput" oninput="handleSearch(this.value)" placeholder="Search dishes, desserts, drinks..." 
+                        class="w-full pl-11 pr-4 py-2 bg-white border border-stone-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-saffron-500 shadow-sm">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- Hero & Info Banner -->
+        <section class="relative bg-stone-900 text-white overflow-hidden py-12 sm:py-16">
+            <div class="absolute inset-0 z-0 opacity-25 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=1600&q=80');"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-stone-950 via-stone-900/90 to-transparent z-0"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="max-w-2xl text-center md:text-left">
+                    <div class="inline-flex items-center space-x-2 bg-saffron-500/20 border border-saffron-500/40 px-3 py-1 rounded-full text-saffron-400 text-xs font-semibold mb-4">
+                        <i class="fa-solid fa-star text-xs"></i>
+                        <span>Michelin-Style Authentic Culinary Heritage</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold font-playfair tracking-wide leading-tight mb-4">
+                        A Symphony of <span class="gold-shimmer">Royal Indian</span> Flavors
+                    </h1>
+                    <p class="text-stone-300 text-sm sm:text-base leading-relaxed mb-6">
+                        Crafted with hand-ground whole spices, 24-hour slow marinades, and wood-fired tandoor mastery. Freshly cooked to order for an unforgettable dining experience.
+                    </p>
+                    
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs sm:text-sm text-stone-300">
+                        <div class="flex items-center space-x-2 bg-stone-800/80 px-3 py-1.5 rounded-lg border border-stone-700">
+                            <i class="fa-solid fa-clock text-saffron-500"></i>
+                            <span>Timing: 12:00 PM – 11:30 PM</span>
+                        </div>
+                        <div class="flex items-center space-x-2 bg-stone-800/80 px-3 py-1.5 rounded-lg border border-stone-700">
+                            <i class="fa-solid fa-location-dot text-saffron-500"></i>
+                            <span>Connaught Place, New Delhi</span>
+                        </div>
+                        <div class="flex items-center space-x-2 bg-stone-800/80 px-3 py-1.5 rounded-lg border border-stone-700">
+                            <i class="fa-solid fa-leaf text-emerald-400"></i>
+                            <span>100% Halal & Fresh Ingredients</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Promo Banner Box -->
+                <div class="w-full md:w-auto bg-stone-800/90 border border-saffron-500/30 p-5 rounded-2xl shadow-2xl backdrop-blur text-center md:text-left min-w-[280px]">
+                    <div class="text-saffron-400 text-xs font-bold uppercase tracking-wider mb-1">Today's Special Offer</div>
+                    <div class="text-xl font-bold font-playfair text-white mb-1">Flat 10% Off Orders</div>
+                    <p class="text-stone-400 text-xs mb-3">Apply coupon code at checkout</p>
+                    <div class="inline-block bg-saffron-500/20 border border-dashed border-saffron-400 text-saffron-300 font-mono font-bold px-3 py-1.5 rounded text-sm tracking-wider select-all cursor-pointer" onclick="copyCouponCode('WELCOME10')">
+                        WELCOME10 <i class="fa-solid fa-copy ml-1.5 text-xs"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Controls: Dietary Filter Bar & Category Scroll -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20">
+            <!-- Filter Bar Card -->
+            <div class="bg-white rounded-2xl shadow-xl border border-stone-100 p-4 mb-8">
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
+                    
+                    <!-- Dietary Filter Toggle Buttons -->
+                    <div class="flex items-center flex-wrap gap-2 w-full lg:w-auto justify-center sm:justify-start">
+                        <button onclick="setDietaryFilter('ALL')" id="diet-ALL" class="diet-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-stone-900 text-white shadow">
+                            All Items
+                        </button>
+                        <button onclick="setDietaryFilter('VEG')" id="diet-VEG" class="diet-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-stone-100 text-stone-700 hover:bg-emerald-50 hover:text-emerald-700 flex items-center space-x-2">
+                            <span class="veg-symbol"></span>
+                            <span>Pure Veg</span>
+                        </button>
+                        <button onclick="setDietaryFilter('NON_VEG')" id="diet-NON_VEG" class="diet-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-stone-100 text-stone-700 hover:bg-red-50 hover:text-red-700 flex items-center space-x-2">
+                            <span class="non-veg-symbol"></span>
+                            <span>Non-Veg</span>
+                        </button>
+                        <button onclick="toggleChefSpecialFilter()" id="chefSpecialBtn" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-stone-100 text-stone-700 hover:bg-amber-50 hover:text-amber-700 flex items-center space-x-1.5">
+                            <i class="fa-solid fa-crown text-amber-500"></i>
+                            <span>Chef's Choice</span>
+                        </button>
+                    </div>
+
+                    <!-- Spice Level Filter dropdown -->
+                    <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-end border-t lg:border-t-0 pt-3 lg:pt-0 border-stone-100">
+                        <span class="text-xs text-stone-500 font-medium">Spice Preference:</span>
+                        <select id="spiceFilter" onchange="handleSpiceFilter(this.value)" class="bg-stone-50 border border-stone-200 text-stone-800 text-xs sm:text-sm rounded-xl px-3 py-2 font-medium focus:outline-none focus:ring-2 focus:ring-saffron-500">
+                            <option value="ALL">Any Spice Level</option>
+                            <option value="MILD">🌶️ Mild & Creamy</option>
+                            <option value="MEDIUM">🌶️🌶️ Medium Spice</option>
+                            <option value="HOT">🌶️🌶️🌶️ Fiery Hot</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Scrollable Category Tabs -->
+                <div class="mt-4 pt-3 border-t border-stone-100 overflow-x-auto whitespace-nowrap scrollbar-none flex items-center space-x-2 sm:space-x-3" id="categoryTabsContainer">
+                    <!-- Dynamic categories rendered via JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Food Grid Section -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+            <!-- Section Header Title -->
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 id="currentCategoryTitle" class="text-2xl sm:text-3xl font-extrabold font-playfair text-stone-900">
+                        Chef's Special Recommendations
+                    </h2>
+                    <p id="currentCategorySubtitle" class="text-xs sm:text-sm text-stone-500 mt-1">
+                        Curated signature recipes perfected over generations
+                    </p>
+                </div>
+                <div class="text-xs font-semibold text-stone-400">
+                    Showing <span id="itemCountDisplay" class="text-saffron-700">0</span> Items
+                </div>
+            </div>
+
+            <!-- Food Cards Grid -->
+            <div id="foodGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Food items inserted dynamically -->
+            </div>
+
+            <!-- Empty State when filter yields 0 items -->
+            <div id="emptyState" class="hidden text-center py-16 bg-white rounded-3xl border border-dashed border-stone-300 my-8">
+                <div class="w-16 h-16 bg-saffron-50 text-saffron-600 rounded-full flex items-center justify-center mx-auto text-2xl mb-4">
+                    <i class="fa-solid fa-plate-wheat"></i>
+                </div>
+                <h3 class="text-lg font-bold text-stone-800">No dishes match your preferences</h3>
+                <p class="text-stone-500 text-sm mt-1 max-w-sm mx-auto">Try clearing your filters or searching for something else like 'Paneer', 'Biryani' or 'Naan'.</p>
+                <button onclick="resetFilters()" class="mt-4 bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold px-5 py-2.5 rounded-full transition-all shadow">
+                    Reset All Filters
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Custom Thali Builder Modal -->
+    <div id="thaliModal" class="fixed inset-0 z-50 hidden bg-stone-900/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl shadow-2xl border border-stone-200 w-full max-w-3xl overflow-hidden my-auto max-h-[90vh] flex flex-col">
+            <!-- Modal Header -->
+            <div class="bg-stone-900 text-white p-5 sm:p-6 flex items-center justify-between relative">
+                <div>
+                    <span class="bg-saffron-500 text-stone-950 text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full tracking-wider">Interactive Customizer</span>
+                    <h3 class="text-xl sm:text-2xl font-bold font-playfair mt-1">Royal Shahi Thali Experience</h3>
+                    <p class="text-stone-400 text-xs mt-0.5">Assemble 1 Starter + 1 Curry + 1 Rice + 1 Bread + 1 Dessert</p>
+                </div>
+                <button onclick="closeThaliModal()" class="w-9 h-9 bg-stone-800 hover:bg-stone-700 rounded-full flex items-center justify-center text-stone-300 hover:text-white transition-all">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (Thali Step Selector) -->
+            <div class="p-5 sm:p-6 overflow-y-auto space-y-6 flex-1 text-sm">
+                <!-- Thali Type Selection -->
+                <div class="flex items-center space-x-4">
+                    <label class="font-bold text-stone-800">Thali Variant:</label>
+                    <div class="flex space-x-3">
+                        <button onclick="selectThaliType('VEG')" id="thaliTypeVeg" class="px-4 py-1.5 rounded-lg border-2 border-emerald-600 bg-emerald-50 text-emerald-800 font-bold text-xs flex items-center space-x-2">
+                            <span class="veg-symbol"></span>
+                            <span>Royal Veg Thali (₹599)</span>
+                        </button>
+                        <button onclick="selectThaliType('NON_VEG')" id="thaliTypeNonVeg" class="px-4 py-1.5 rounded-lg border-2 border-stone-200 bg-stone-50 text-stone-600 font-bold text-xs flex items-center space-x-2">
+                            <span class="non-veg-symbol"></span>
+                            <span>Royal Non-Veg Thali (₹699)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dynamic Step Choices -->
+                <div id="thaliChoicesContainer" class="space-y-5">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="bg-stone-50 p-4 sm:p-5 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                    <span class="text-xs text-stone-500 block">Total Thali Price</span>
+                    <span id="thaliTotalPrice" class="text-2xl font-black text-saffron-700">₹599</span>
+                </div>
+                <button onclick="addCustomThaliToCart()" class="w-full sm:w-auto bg-saffron-600 hover:bg-saffron-700 text-white font-bold px-8 py-3 rounded-xl shadow-lg transition-all hover:scale-105 active:scale-95 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Add Customized Thali to Order</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Inspector / Detail Modal -->
+    <div id="itemModal" class="fixed inset-0 z-50 hidden bg-stone-900/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl shadow-2xl border border-stone-200 w-full max-w-lg overflow-hidden my-auto relative">
+            <button onclick="closeItemModal()" class="absolute top-4 right-4 z-10 w-9 h-9 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center backdrop-blur transition-all">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="itemModalContent">
+                <!-- Dynamically filled by showItemDetails() -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide-over Shopping Cart Drawer -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
+        <!-- Backdrop -->
+        <div id="cartBackdrop" onclick="toggleCartDrawer()" class="absolute inset-0 bg-stone-900/60 opacity-0 transition-opacity duration-300 pointer-events-none"></div>
+
+        <!-- Drawer Content -->
+        <div id="cartContent" class="absolute top-0 right-0 bottom-0 w-full max-w-md bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 pointer-events-auto">
+            <!-- Cart Header -->
+            <div class="bg-stone-900 text-white p-5 flex items-center justify-between border-b border-stone-800">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-bag-shopping text-saffron-500 text-xl"></i>
+                    <div>
+                        <h3 class="font-bold font-playfair text-lg">Your Order Details</h3>
+                        <p class="text-xs text-stone-400" id="cartHeaderSub">Table #04 / Dine-In</p>
+                    </div>
+                </div>
+                <button onclick="toggleCartDrawer()" class="text-stone-400 hover:text-white p-2">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Cart Order Items Container -->
+            <div id="cartItemsList" class="flex-1 overflow-y-auto p-5 space-y-4">
+                <!-- Items rendered dynamically -->
+            </div>
+
+            <!-- Empty Cart State -->
+            <div id="emptyCartDisplay" class="flex-1 flex flex-col items-center justify-center p-8 text-center">
+                <div class="w-20 h-20 bg-stone-100 text-stone-300 rounded-full flex items-center justify-center text-3xl mb-4">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <h4 class="font-bold text-stone-700">Your basket is empty</h4>
+                <p class="text-xs text-stone-400 mt-1 max-w-xs">Explore our rich menu categories and add your favorite gourmet dishes.</p>
+            </div>
+
+            <!-- Cart Summary & Checkout Footer -->
+            <div id="cartFooter" class="bg-stone-50 border-t border-stone-200 p-5 space-y-4">
+                <!-- Order Type Choice -->
+                <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-stone-200 text-xs">
+                    <span class="font-semibold text-stone-600">Dining Style:</span>
+                    <select id="orderTypeSelect" class="bg-transparent font-bold text-saffron-700 focus:outline-none">
+                        <option value="DINE_IN">🍽️ Dine-In (Table Service)</option>
+                        <option value="TAKEAWAY">🛍️ Takeaway / Pickup</option>
+                        <option value="DELIVERY">🛵 Home Delivery</option>
+                    </select>
+                </div>
+
+                <!-- Coupon Input -->
+                <div class="flex space-x-2">
+                    <input type="text" id="couponInput" placeholder="Enter Promo Code" uppercase class="flex-1 px-3 py-2 border border-stone-200 rounded-xl text-xs uppercase font-mono focus:outline-none focus:ring-1 focus:ring-saffron-500">
+                    <button onclick="applyCoupon()" class="bg-stone-900 hover:bg-stone-800 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all">Apply</button>
+                </div>
+                <div id="couponStatus" class="hidden text-xs text-emerald-600 font-semibold flex items-center justify-between">
+                    <span><i class="fa-solid fa-circle-check mr-1"></i> Coupon Applied: WELCOME10</span>
+                    <button onclick="removeCoupon()" class="text-red-500 underline text-[10px]">Remove</button>
+                </div>
+
+                <!-- Bill Breakdown -->
+                <div class="space-y-1.5 text-xs text-stone-600 pt-2 border-t border-stone-200">
+                    <div class="flex justify-between">
+                        <span>Subtotal</span>
+                        <span id="billSubtotal" class="font-semibold text-stone-800">₹0</span>
+                    </div>
+                    <div id="discountRow" class="flex justify-between text-emerald-600 hidden">
+                        <span>Promo Discount (10%)</span>
+                        <span id="billDiscount">-₹0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>GST (5%)</span>
+                        <span id="billGST" class="font-semibold text-stone-800">₹0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Restaurant Service Charge (5%)</span>
+                        <span id="billService" class="font-semibold text-stone-800">₹0</span>
+                    </div>
+                    <div class="flex justify-between text-sm font-bold text-stone-900 pt-2 border-t border-stone-200">
+                        <span>Grand Total</span>
+                        <span id="billGrandTotal" class="text-saffron-700 text-lg">₹0</span>
+                    </div>
+                </div>
+
+                <!-- Place Order Button -->
+                <button onclick="placeOrder()" class="w-full bg-saffron-600 hover:bg-saffron-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center space-x-2">
+                    <span>Send Order to Kitchen</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Banner -->
+    <div id="toastNotification" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden bg-stone-900 text-white px-5 py-3 rounded-full shadow-2xl border border-stone-700 text-xs sm:text-sm font-medium flex items-center space-x-3 transition-all duration-300">
+        <span id="toastIcon" class="text-saffron-500"><i class="fa-solid fa-circle-check"></i></span>
+        <span id="toastMessage">Item added to your order!</span>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-stone-950 text-stone-400 py-10 border-t border-stone-800 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full bg-saffron-600 text-stone-950 flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <div>
+                    <span class="text-white font-playfair font-bold text-sm block">Saffron & Silk Fine Dining</span>
+                    <span>© 2026 Saffron & Silk. All Rights Reserved. Prices inclusive of applicable government taxes.</span>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-6 text-stone-400">
+                <a href="#menu" class="hover:text-saffron-400">Digital Menu</a>
+                <a href="javascript:void(0)" onclick="openThaliModal()" class="hover:text-saffron-400">Shahi Thali</a>
+                <a href="javascript:void(0)" class="hover:text-saffron-400"><i class="fa-solid fa-phone mr-1"></i> +91 98765 43210</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // =========================================================================
+        // RESTAURANT MENU DATASET (Complete Indian Menu with Authentic Prices in ₹)
+        // =========================================================================
+        const MENU_DATA = [
+            // CHEF'S SPECIALS
+            {
+                id: 'sp1',
+                name: 'Raan-E-Sikandari',
+                category: 'Specials',
+                price: 1250,
+                rating: 4.9,
+                reviews: 142,
+                isVeg: false,
+                isSpicy: 2,
+                isChefSpecial: true,
+                prepTime: '35 mins',
+                calories: '850 kcal',
+                image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80',
+                description: 'Slow-braised whole leg of spring lamb marinated for 24 hours in aromatic whole spices, dark rum, and charred in clay tandoor.'
+            },
+            {
+                id: 'sp2',
+                name: 'Dal Mughal-E-Azam',
+                category: 'Specials',
+                price: 420,
+                rating: 4.9,
+                reviews: 310,
+                isVeg: true,
+                isSpicy: 1,
+                isChefSpecial: true,
+                prepTime: '20 mins',
+                calories: '420 kcal',
+                image: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80',
+                description: 'Black lentils slow cooked overnight over charcoal ember, enriched with organic white churned butter, fresh tomato reduction, and cream.'
+            },
+            {
+                id: 'sp3',
+                name: 'Gold Leaf Shahi Paneer Tikka',
+                category: 'Specials',
+                price: 550,
+                rating: 4.8,
+                reviews: 98,
+                isVeg: true,
+                isSpicy: 1,
+                isChefSpecial: true,
+                prepTime: '20 mins',
+                calories: '380 kcal',
+                image: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=600&q=80',
+                description: 'Handcrafted cottage cheese cubes marinated in saffron yoghurt and yellow chili, grilled in tandoor and garnished with edible gold leaf.'
+            },
+
+            // STARTERS & APPETIZERS
+            {
+                id: 'st1',
+                name: 'Paneer Tikka Angaara',
+                category: 'Starters',
+                price: 360,
+                rating: 4.7,
+                reviews: 210,
+                isVeg: true,
+                isSpicy: 3,
+                isChefSpecial: false,
+                prepTime: '15 mins',
+                calories: '320 kcal',
+                image: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=600&q=80',
+                description: 'Fiery smoked paneer cubes marinated in Mathania red chilies, mustard oil, and hung curd.'
+            },
+            {
+                id: 'st2',
+                name: 'Dahi Ke Kebab',
+                category: 'Starters',
+                price: 320,
+                rating: 4.6,
+                reviews: 165,
+                isVeg: true,
+                isSpicy: 1,
+                isChefSpecial: false,
+                prepTime: '15 mins',
+                calories: '280 kcal',
+                image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80',
+                description: 'Velvety hung yoghurt patties infused with cardamom, green chilies, coriander, and crispy bread crumb crust.'
+            },
+            {
+                id: 'st3',
+                name: 'Amritsari Fish Fry',
+                category: 'Starters',
+                price: 480,
+                rating: 4.8,
+                reviews: 240,
+                isVeg: false,
+                isSpicy: 2,
+                isChefSpecial: false,
+                prepTime: '20 mins',
+                calories: '390 kcal',
+                image: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=600&q=80',
+                description: 'Crispy sole fish fillets battered in carom seed (ajwain), spicy gram flour, lemon juice and fried golden.'
+            },
+            {
+                id: 'st4',
+                name: 'Chicken 65 Original',
+                category: 'Starters',
+                price: 390,
+                rating: 4.7,
+                reviews: 180,
+                isVeg: false,
+                isSpicy: 3,
+                isChefSpecial: false,
+                prepTime: '15 mins',
+                calories: '410 kcal',
+                image: 'https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?auto=format&fit=crop&w=600&q=80',
+                description: 'Spicy deep-fried chicken morsels tossed in garlic, curry leaves, red chili paste and southern spices.'
+            },
+
+            // TANDOORI & CLAY OVEN
+            {
+                id: 'tn1',
+                name: 'Murgh Malai Tikka',
+                category: 'Tandoori',
+                price: 440,
+                rating: 4.8,
+                reviews: 290,
+                isVeg: false,
+                isSpicy: 1,
+                isChefSpecial: false,
+                prepTime: '20 mins',
+                calories: '450 kcal',
+                image: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=600&q=80',
+                description: 'Boneless chicken thighs marinated in cream cheese, cashew paste, green cardamom and charcoal charred.'
+            },
+            {
+                id: 'tn2',
+                name: 'Tandoori Soya Chaap',
+                category: 'Tandoori',
+                price: 350,
+                rating: 4.5,
+                reviews: 140,
+                isVeg: true,
+                isSpicy: 2,
+                isChefSpecial: false,
+                prepTime: '20 mins',
+                calories: '310 kcal',
+                image: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=600&q=80',
+                description: 'Succulent protein-rich soya chops slathered in spicy tandoori marinade and roasted in copper pit.'
+            },
+            {
+                id: 'tn3',
+                name: 'Tandoori Tiger Prawns',
+                category: 'Tandoori',
+                price: 690,
+                rating: 4.9,
+                reviews: 115,
+                isVeg: false,
+                isSpicy: 2,
+                isChefSpecial: true,
+                prepTime: '20 mins',
+                calories: '340 kcal',
+                image: 'https://images.unsplash.com/photo-1559742811-822863cc4530?auto=format&fit=crop&w=600&q=80',
+                description: 'Jumbo sea prawns infused with yellow mustard, lemon butter, and roasted on skewer over red hot embers.'
+            },
+
+            // MAIN COURSE (CURRIES)
+            {
+                id: 'mc1',
+                name: 'Butter Chicken (Old Delhi Style)',
+                category: 'Main Course',
+                price: 490,
+                rating: 4.9,
+                reviews: 580,
+                isVeg: false,
+                isSpicy: 1,
+                isChefSpecial: true,
+                prepTime: '25 mins',
+                calories: '560 kcal',
+                image: 'https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?auto=format&fit=crop&w=600&q=80',
+                description: 'Tandoori grilled chicken pulled and simmered in velvety tomato gravy, finished with fenugreek and churned butter.'
+            },
+            {
+                id: 'mc2',
+                name: 'Paneer Butter Masala',
+                category: 'Main Course',
+                price: 390,
+                rating: 4.7,
+                reviews: 420,
+                isVeg: true,
+                isSpicy: 1,
+                isChefSpecial: false,
+                prepTime: '20 mins',
+                calories: '480 kcal',
+                image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=600&q=80',
+                description: 'Fresh malai paneer cubes submerged in rich cashew-tomato gravy infused with dried kasuri methi leaves.'
+            },
+            {
+                id: 'mc3',
+                name: 'Laal Maas (Rajasthani Specialty)',
+                category: 'Main Course',
+                price: 590,
+                rating: 4.8,
+                reviews: 210,
+                isVeg: false,
+                isSpicy: 3,
+                isChefSpecial: true,
+                prepTime: '30 mins',
+                calories: '610 kcal',
+                image: 'https://images.unsplash.com/photo-1545247181-516773cae754?auto=format&fit=crop&w=600&q=80',
+                description: 'Fiery Rajasthani mutton curry braised with whole Mathania red chilies, garlic, and clarified ghee.'
+            },
+            {
+                id: 'mc4',
+                name: 'Kadhai Subz Supreme',
+                category: 'Main Course',
+                price: 340,
+                rating: 4.5,
+                reviews: 130,
+                isVeg: true,
+                isSpicy: 2,
+                isChefSpecial: false,
+                prepTime: '20 mins',
+                calories: '290 kcal',
+                image: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80',
+                description: 'Assorted seasonal garden vegetables tossed in iron kadhai with freshly pounded coriander and black pepper.'
+            },
+
+            // BIRYANIS & RICE
+            {
+                id: 'br1',
+                name: 'Hyderabadi Dum Chicken Biryani',
+                category: 'Biryani & Rice',
+                price: 450,
+                rating: 4.9,
+                reviews: 620,
+                isVeg: false,
+                isSpicy: 2,
+                isChefSpecial: true,
+                prepTime: '25 mins',
+                calories: '650 kcal',
+                image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80',
+                description: 'Long-grain aged Basmati rice layered with marinated chicken, saffron, caramelised onions, cooked under dough seal (Dum).'
+            },
+            {
+                id: 'br2',
+                name: 'Awadhi Mutton Dum Biryani',
+                category: 'Biryani & Rice',
+                price: 580,
+                rating: 4.9,
+                reviews: 380,
+                isVeg: false,
+                isSpicy: 2,
+                isChefSpecial: true,
+                prepTime: '30 mins',
+                calories: '710 kcal',
+                image: 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=600&q=80',
+                description: 'Melt-in-mouth goat meat layered with kewra-scented rice and Lucknowi pot spices, served with Mirchi Ka Salan.'
+            },
+            {
+                id: 'br3',
+                name: 'Subz Saffron Dum Biryani',
+                category: 'Biryani & Rice',
+                price: 360,
+                rating: 4.6,
+                reviews: 210,
+                isVeg: true,
+                isSpicy: 1,
+                isChefSpecial: false,
+                prepTime: '20 mins',
+                calories: '420 kcal',
+                image: 'https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&w=600&q=80',
+                description: 'Garden vegetables, paneer cubes, and raisins layered with fragrant saffron rice, served with Burani Raita.'
+            },
+            {
+                id: 'br4',
+                name: 'Steamed Saffron Basmati Rice',
+                category: 'Biryani & Rice',
+                price: 180,
+                rating: 4.5,
+                reviews: 90,
+                isVeg: true,
+                isSpicy: 0,
+                isChefSpecial: false,
+                prepTime: '10 mins',
+                calories: '220 kcal',
+                image: 'https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=600&q=80',
+                description: 'Fluffy extra-long grain rice steamed with whole green cardamom and Kashmiri saffron strands.'
+            },
+
+            // BREADS & NAANS
+            {
+                id: 'bd1',
+                name: 'Garlic Butter Naan',
+                category: 'Indian Breads',
+                price: 90,
+                rating: 4.8,
+                reviews: 510,
+                isVeg: true,
+                isSpicy: 0,
+                isChefSpecial: false,
+                prepTime: '8 mins',
+                calories: '180 kcal',
+                image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80',
+                description: 'Leavened refined flour bread slathered with minced garlic, fresh cilantro, and melted amul butter.'
+            },
+            {
+                id: 'bd2',
+                name: 'Truffle & Cheese Naan',
+                category: 'Indian Breads',
+                price: 180,
+                rating: 4.9,
+                reviews: 140,
+                isVeg: true,
+                isSpicy: 0,
+                isChefSpecial: true,
+                prepTime: '10 mins',
+                calories: '240 kcal',
+                image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80',
+                description: 'Artisanal tandoori naan stuffed with processed mozzarella and drizzled with white truffle oil.'
+            },
+            {
+                id: 'bd3',
+                name: 'Lachha Paratha',
+                category: 'Indian Breads',
+                price: 85,
+                rating: 4.6,
+                reviews: 195,
+                isVeg: true,
+                isSpicy: 0,
+                isChefSpecial: false,
+                prepTime: '8 mins',
+                calories: '190 kcal',
+                image: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80',
+                description: 'Multi-layered whole wheat bread baked crisp in clay oven with clarified ghee.'
+            },
+
+            // SOUTH INDIAN SPECIALTIES
+            {
+                id: 'si1',
+                name: 'Ghee Roast Masala Dosa',
+                category: 'South Indian',
+                price: 220,
+                rating: 4.8,
+                reviews: 320,
+                isVeg: true,
+                isSpicy: 2,
+                isChefSpecial: false,
+                prepTime: '12 mins',
+                calories: '380 kcal',
+                image: 'https://images.unsplash.com/photo-1668236543090-82eba5ee5976?auto=format&fit=crop&w=600&q=80',
+                description: 'Crisp fermented rice crepe smeared with pure Desi Ghee and filled with tempered potato masala. Served with chutneys & sambar.'
+            },
+            {
+                id: 'si2',
+                name: 'Chettinad Chicken Pepper Fry',
+                category: 'South Indian',
+                price: 460,
+                rating: 4.7,
+                reviews: 175,
+                isVeg: false,
+                isSpicy: 3,
+                isChefSpecial: false,
+                prepTime: '20 mins',
+                calories: '420 kcal',
+                image: 'https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?auto=format&fit=crop&w=600&q=80',
+                description: 'Tender chicken pieces pan-roasted with freshly crushed black peppercorns, curry leaves, and coconut oil.'
+            },
+
+            // DESSERTS
+            {
+                id: 'ds1',
+                name: 'Gulab Jamun with Rabri & Gold Dust',
+                category: 'Desserts',
+                price: 220,
+                rating: 4.9,
+                reviews: 410,
+                isVeg: true,
+                isSpicy: 0,
+                isChefSpecial: true,
+                prepTime: '5 mins',
+                calories: '340 kcal',
+                image: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=600&q=80',
+                description: 'Warm khoya dumplings soaked in rose syrup, paired with chilled saffron rabri and pistachio flakes.'
+            },
+            {
+                id: 'ds2',
+                name: 'Matka Kulfi Falooda',
+                category: 'Desserts',
+                price: 240,
+                rating: 4.8,
+                reviews: 280,
+                isVeg: true,
+                isSpicy: 0,
+                isChefSpecial: false,
+                prepTime: '5 mins',
+                calories: '310 kcal',
+                image: 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=600&q=80',
+                description: 'Traditional slow-churned pistachio kulfi served over basil seeds, rose syrup vermicelli, and crushed nuts.'
+            },
+
+            // BEVERAGES
+            {
+                id: 'bv1',
+                name: 'Mango Lassi Royale',
+                category: 'Beverages',
+                price: 160,
+                rating: 4.9,
+                reviews: 520,
+                isVeg: true,
+                isSpicy: 0,
+                isChefSpecial: false,
+                prepTime: '5 mins',
+                calories: '210 kcal',
+                image: 'https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&w=600&q=80',
+                description: 'Thick churned sweet yoghurt blended with Alphonso mango pulp, cardamom, and topped with sliced almonds.'
+            },
+            {
+                id: 'bv2',
+                name: 'Masala Elaichi Chai',
+                category: 'Beverages',
+                price: 90,
+                rating: 4.8,
+                reviews: 360,
+                isVeg: true,
+                isSpicy: 1,
+                isChefSpecial: false,
+                prepTime: '5 mins',
+                calories: '90 kcal',
+                image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80',
+                description: 'Slow-brewed Assam tea leaves with crushed green cardamom, ginger, cloves, and whole milk.'
+            }
+        ];
+
+        // CATEGORY LIST SETUP
+        const CATEGORIES = [
+            { id: 'ALL', name: 'Full Menu', icon: 'fa-border-all' },
+            { id: 'Specials', name: 'Chef Specials', icon: 'fa-crown' },
+            { id: 'Starters', name: 'Starters', icon: 'fa-bowl-food' },
+            { id: 'Tandoori', name: 'Tandoori & Grill', icon: 'fa-fire' },
+            { id: 'Main Course', name: 'Main Course', icon: 'fa-utensils' },
+            { id: 'Biryani & Rice', name: 'Biryani & Rice', icon: 'fa-bowl-rice' },
+            { id: 'Indian Breads', name: 'Breads & Naan', icon: 'fa-bread-slice' },
+            { id: 'South Indian', name: 'South Indian', icon: 'fa-pepper-hot' },
+            { id: 'Desserts', name: 'Desserts', icon: 'fa-ice-cream' },
+            { id: 'Beverages', name: 'Drinks & Lassi', icon: 'fa-glass-water' }
+        ];
+
+        // STATE MANAGEMENT
+        let currentCategory = 'ALL';
+        let dietaryFilter = 'ALL'; // 'ALL', 'VEG', 'NON_VEG'
+        let onlyChefSpecials = false;
+        let spiceFilter = 'ALL';
+        let searchQuery = '';
+        let cart = [];
+        let isCouponApplied = false;
+
+        // Custom Thali State
+        let thaliState = {
+            type: 'VEG',
+            starter: null,
+            curry: null,
+            rice: null,
+            bread: null,
+            dessert: null
+        };
+
+        // DOM INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {
+            renderCategoryTabs();
+            renderFoodGrid();
+            updateCartUI();
+        });
+
+        function renderCategoryTabs() {
+            const container = document.getElementById('categoryTabsContainer');
+            container.innerHTML = CATEGORIES.map(cat => `
+                <button onclick="selectCategory('${cat.id}')" 
+                    class="tab-btn px-4 py-2 rounded-xl border border-stone-200 text-xs sm:text-sm font-semibold transition-all inline-flex items-center space-x-2 shrink-0 ${currentCategory === cat.id ? 'active' : 'bg-white text-stone-700 hover:bg-stone-50'}">
+                    <i class="fa-solid ${cat.icon} ${currentCategory === cat.id ? 'text-saffron-600' : 'text-stone-400'}"></i>
+                    <span>${cat.name}</span>
+                </button>
+            `).join('');
+        }
+
+        function selectCategory(catId) {
+            currentCategory = catId;
+            renderCategoryTabs();
+            renderFoodGrid();
+            
+            // Update Title
+            const catObj = CATEGORIES.find(c => c.id === catId);
+            document.getElementById('currentCategoryTitle').innerText = catObj ? catObj.name : 'Menu Items';
+        }
+
+        function setDietaryFilter(type) {
+            dietaryFilter = type;
+            document.querySelectorAll('.diet-btn').forEach(btn => {
+                btn.classList.remove('bg-stone-900', 'text-white', 'shadow');
+                btn.classList.add('bg-stone-100', 'text-stone-700');
+            });
+            
+            const activeBtn = document.getElementById(`diet-${type}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-stone-100', 'text-stone-700');
+                activeBtn.classList.add('bg-stone-900', 'text-white', 'shadow');
+            }
+            renderFoodGrid();
+        }
+
+        function toggleChefSpecialFilter() {
+            onlyChefSpecials = !onlyChefSpecials;
+            const btn = document.getElementById('chefSpecialBtn');
+            if (onlyChefSpecials) {
+                btn.classList.add('bg-amber-100', 'text-amber-800', 'border-2', 'border-amber-400');
+            } else {
+                btn.classList.remove('bg-amber-100', 'text-amber-800', 'border-2', 'border-amber-400');
+            }
+            renderFoodGrid();
+        }
+
+        function handleSpiceFilter(val) {
+            spiceFilter = val;
+            renderFoodGrid();
+        }
+
+        function handleSearch(val) {
+            searchQuery = val.trim().toLowerCase();
+            const clearBtn = document.getElementById('clearSearchBtn');
+            if (searchQuery.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+            renderFoodGrid();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('mobileSearchInput').value = '';
+            searchQuery = '';
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+            renderFoodGrid();
+        }
+
+        function resetFilters() {
+            currentCategory = 'ALL';
+            dietaryFilter = 'ALL';
+            onlyChefSpecials = false;
+            spiceFilter = 'ALL';
+            searchQuery = '';
+            
+            document.getElementById('searchInput').value = '';
+            document.getElementById('mobileSearchInput').value = '';
+            document.getElementById('spiceFilter').value = 'ALL';
+            
+            const chefBtn = document.getElementById('chefSpecialBtn');
+            chefBtn.classList.remove('bg-amber-100', 'text-amber-800', 'border-2', 'border-amber-400');
+
+            setDietaryFilter('ALL');
+            renderCategoryTabs();
+            renderFoodGrid();
+            showToast('Filters reset to default');
+        }
+
+        function renderFoodGrid() {
+            const grid = document.getElementById('foodGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            // Filter items
+            const filtered = MENU_DATA.filter(item => {
+                // Category Filter
+                if (currentCategory !== 'ALL' && item.category !== currentCategory) return false;
+                
+                // Dietary Filter
+                if (dietaryFilter === 'VEG' && !item.isVeg) return false;
+                if (dietaryFilter === 'NON_VEG' && item.isVeg) return false;
+
+                // Chef Special
+                if (onlyChefSpecials && !item.isChefSpecial) return false;
+
+                // Spice Filter
+                if (spiceFilter === 'MILD' && item.isSpicy > 1) return false;
+                if (spiceFilter === 'MEDIUM' && (item.isSpicy !== 2)) return false;
+                if (spiceFilter === 'HOT' && item.isSpicy !== 3) return false;
+
+                // Search query
+                if (searchQuery) {
+                    const matchName = item.name.toLowerCase().includes(searchQuery);
+                    const matchDesc = item.description.toLowerCase().includes(searchQuery);
+                    const matchCat = item.category.toLowerCase().includes(searchQuery);
+                    if (!matchName && !matchDesc && !matchCat) return false;
+                }
+
+                return true;
+            });
+
+            document.getElementById('itemCountDisplay').innerText = filtered.length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            grid.innerHTML = filtered.map(item => {
+                const inCartItem = cart.find(ci => ci.id === item.id);
+                const cartQty = inCartItem ? inCartItem.qty : 0;
+
+                // Render chili spice level
+                let spiceIcons = '';
+                for (let i = 0; i < item.isSpicy; i++) {
+                    spiceIcons += '🌶️';
+                }
+
+                return `
+                <div class="bg-white rounded-3xl overflow-hidden border border-stone-200/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+                    <div>
+                        <!-- Image Container -->
+                        <div class="relative h-48 sm:h-52 overflow-hidden bg-stone-100 cursor-pointer" onclick="showItemDetails('${item.id}')">
+                            <img src="${item.image}" alt="${item.name}" 
+                                onerror="this.src='https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80'" 
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            
+                            <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-60"></div>
+
+                            <!-- Veg / Non-Veg Icon Tag -->
+                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur p-1.5 rounded-lg shadow">
+                                ${item.isVeg ? '<div class="veg-symbol" title="Pure Veg"></div>' : '<div class="non-veg-symbol" title="Non-Veg"></div>'}
+                            </div>
+
+                            <!-- Chef Special Tag -->
+                            ${item.isChefSpecial ? `
+                                <div class="absolute top-3 right-3 bg-stone-900/90 text-saffron-400 border border-saffron-500/40 text-[10px] font-bold px-2.5 py-1 rounded-full shadow flex items-center space-x-1 backdrop-blur">
+                                    <i class="fa-solid fa-crown text-[9px]"></i>
+                                    <span>Chef Choice</span>
+                                </div>
+                            ` : ''}
+
+                            <!-- Rating Pill -->
+                            <div class="absolute bottom-3 left-3 bg-stone-900/80 backdrop-blur text-white text-xs font-bold px-2.5 py-1 rounded-lg flex items-center space-x-1">
+                                <i class="fa-solid fa-star text-amber-400 text-xs"></i>
+                                <span>${item.rating}</span>
+                                <span class="text-[10px] text-stone-300">(${item.reviews})</span>
+                            </div>
+                        </div>
+
+                        <!-- Card Body Content -->
+                        <div class="p-4 sm:p-5">
+                            <div class="flex items-start justify-between gap-2 mb-1">
+                                <h3 onclick="showItemDetails('${item.id}')" class="font-bold text-stone-900 font-playfair text-base sm:text-lg leading-snug hover:text-saffron-700 cursor-pointer transition-colors">
+                                    ${item.name}
+                                </h3>
+                            </div>
+
+                            <p class="text-stone-500 text-xs line-clamp-2 leading-relaxed mb-3">
+                                ${item.description}
+                            </p>
+
+                            <div class="flex items-center space-x-2 text-[11px] text-stone-400 font-medium mb-4">
+                                <span><i class="fa-regular fa-clock mr-1"></i>${item.prepTime}</span>
+                                <span>•</span>
+                                <span>${spiceIcons || 'Mild'}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer / Add to Cart Actions -->
+                    <div class="px-4 sm:px-5 pb-4 sm:pb-5 pt-0 flex items-center justify-between border-t border-stone-100 pt-3">
+                        <div>
+                            <span class="text-xs text-stone-400 block font-medium">Price</span>
+                            <span class="text-lg sm:text-xl font-extrabold text-stone-900 font-sans">₹${item.price}</span>
+                        </div>
+
+                        <!-- Action Button -->
+                        <div>
+                            ${cartQty === 0 ? `
+                                <button onclick="addToCart('${item.id}')" class="bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition-all hover:scale-105 active:scale-95 flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span>ADD</span>
+                                </button>
+                            ` : `
+                                <div class="flex items-center bg-stone-900 text-white rounded-xl p-1 shadow">
+                                    <button onclick="updateQty('${item.id}', -1)" class="w-7 h-7 hover:bg-stone-800 rounded-lg flex items-center justify-center font-bold text-xs transition-colors">
+                                        <i class="fa-solid fa-minus"></i>
+                                    </button>
+                                    <span class="px-2.5 font-bold text-xs text-saffron-400">${cartQty}</span>
+                                    <button onclick="updateQty('${item.id}', 1)" class="w-7 h-7 hover:bg-stone-800 rounded-lg flex items-center justify-center font-bold text-xs transition-colors">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function showItemDetails(itemId) {
+            const item = MENU_DATA.find(i => i.id === itemId);
+            if (!item) return;
+
+            const modalContent = document.getElementById('itemModalContent');
+            let spiceIcons = '';
+            for (let i = 0; i < item.isSpicy; i++) spiceIcons += '🌶️';
+
+            modalContent.innerHTML = `
+                <div class="relative h-64 bg-stone-900 overflow-hidden">
+                    <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/40 to-transparent"></div>
+                    <div class="absolute bottom-4 left-5 right-5 text-white">
+                        <div class="flex items-center space-x-2 mb-1">
+                            ${item.isVeg ? '<span class="veg-symbol"></span>' : '<span class="non-veg-symbol"></span>'}
+                            <span class="text-xs font-semibold text-saffron-400 uppercase tracking-wider">${item.category}</span>
+                        </div>
+                        <h3 class="text-2xl font-bold font-playfair">${item.name}</h3>
+                    </div>
+                </div>
+
+                <div class="p-6 space-y-4">
+                    <div class="flex items-center justify-between text-xs text-stone-500 border-b border-stone-100 pb-3">
+                        <div class="flex items-center space-x-1">
+                            <i class="fa-solid fa-star text-amber-500"></i>
+                            <span class="font-bold text-stone-800">${item.rating}</span>
+                            <span>(${item.reviews} reviews)</span>
+                        </div>
+                        <div><i class="fa-solid fa-fire mr-1 text-saffron-600"></i>${item.calories}</div>
+                        <div><i class="fa-regular fa-clock mr-1"></i>${item.prepTime}</div>
+                    </div>
+
+                    <p class="text-stone-600 text-sm leading-relaxed">
+                        ${item.description}
+                    </p>
+
+                    <div class="bg-stone-50 p-3.5 rounded-xl border border-stone-200/80 space-y-1.5 text-xs text-stone-600">
+                        <div class="flex justify-between">
+                            <span class="font-semibold text-stone-700">Spice Rating:</span>
+                            <span>${spiceIcons || 'Mild / Kid Friendly'}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-semibold text-stone-700">Preparation:</span>
+                            <span>Fresh Cooked in Tandoor / Kadhai</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-stone-400 block">Price per portion</span>
+                            <span class="text-2xl font-extrabold text-stone-900">₹${item.price}</span>
+                        </div>
+                        <button onclick="addToCart('${item.id}'); closeItemModal();" class="bg-saffron-600 hover:bg-saffron-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-bag-shopping"></i>
+                            <span>Add To Order</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('itemModal').classList.remove('hidden');
+        }
+
+        function closeItemModal() {
+            document.getElementById('itemModal').classList.add('hidden');
+        }
+
+        function addToCart(itemId, customTitle = null, customPrice = null) {
+            if (customTitle) {
+                // Custom Thali or item
+                cart.push({
+                    id: 'custom_' + Date.now(),
+                    name: customTitle,
+                    price: customPrice,
+                    qty: 1,
+                    isVeg: thaliState.type === 'VEG'
+                });
+            } else {
+                const item = MENU_DATA.find(i => i.id === itemId);
+                if (!item) return;
+
+                const existing = cart.find(ci => ci.id === itemId);
+                if (existing) {
+                    existing.qty += 1;
+                } else {
+                    cart.push({
+                        id: item.id,
+                        name: item.name,
+                        price: item.price,
+                        qty: 1,
+                        isVeg: item.isVeg
+                    });
+                }
+            }
+
+            renderFoodGrid();
+            updateCartUI();
+            showToast('Added dish to order!');
+        }
+
+        function updateQty(itemId, delta) {
+            const item = cart.find(ci => ci.id === itemId);
+            if (!item) return;
+
+            item.qty += delta;
+            if (item.qty <= 0) {
+                cart = cart.filter(ci => ci.id !== itemId);
+            }
+
+            renderFoodGrid();
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartItemsList = document.getElementById('cartItemsList');
+            const emptyCartDisplay = document.getElementById('emptyCartDisplay');
+            const cartFooter = document.getElementById('cartFooter');
+            const cartBadge = document.getElementById('cartBadge');
+
+            const totalItemsCount = cart.reduce((sum, item) => sum + item.qty, 0);
+            cartBadge.innerText = totalItemsCount;
+
+            if (totalItemsCount > 0) {
+                cartBadge.classList.remove('scale-0');
+            } else {
+                cartBadge.classList.add('scale-0');
+            }
+
+            if (cart.length === 0) {
+                cartItemsList.innerHTML = '';
+                emptyCartDisplay.classList.remove('hidden');
+                cartFooter.classList.add('hidden');
+                return;
+            }
+
+            emptyCartDisplay.classList.add('hidden');
+            cartFooter.classList.remove('hidden');
+
+            cartItemsList.innerHTML = cart.map(item => `
+                <div class="flex items-center justify-between bg-stone-50 p-3.5 rounded-2xl border border-stone-200/70">
+                    <div class="flex items-center space-x-3">
+                        ${item.isVeg ? '<span class="veg-symbol"></span>' : '<span class="non-veg-symbol"></span>'}
+                        <div>
+                            <h4 class="font-bold text-stone-900 text-xs sm:text-sm line-clamp-1">${item.name}</h4>
+                            <span class="text-xs text-stone-500 font-semibold">₹${item.price} × ${item.qty}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                        <span class="font-bold text-stone-900 text-sm">₹${item.price * item.qty}</span>
+                        <div class="flex items-center bg-white border border-stone-200 text-stone-800 rounded-lg shadow-sm">
+                            <button onclick="updateQty('${item.id}', -1)" class="w-6 h-6 hover:bg-stone-100 flex items-center justify-center font-bold text-xs">
+                                <i class="fa-solid fa-minus text-[10px]"></i>
+                            </button>
+                            <span class="px-2 font-bold text-xs text-saffron-700">${item.qty}</span>
+                            <button onclick="updateQty('${item.id}', 1)" class="w-6 h-6 hover:bg-stone-100 flex items-center justify-center font-bold text-xs">
+                                <i class="fa-solid fa-plus text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Calculations
+            const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+            let discount = isCouponApplied ? Math.round(subtotal * 0.10) : 0;
+            const gst = Math.round((subtotal - discount) * 0.05);
+            const serviceCharge = Math.round((subtotal - discount) * 0.05);
+            const grandTotal = subtotal - discount + gst + serviceCharge;
+
+            document.getElementById('billSubtotal').innerText = `₹${subtotal}`;
+            if (isCouponApplied) {
+                document.getElementById('discountRow').classList.remove('hidden');
+                document.getElementById('billDiscount').innerText = `-₹${discount}`;
+            } else {
+                document.getElementById('discountRow').classList.add('hidden');
+            }
+            document.getElementById('billGST').innerText = `₹${gst}`;
+            document.getElementById('billService').innerText = `₹${serviceCharge}`;
+            document.getElementById('billGrandTotal').innerText = `₹${grandTotal}`;
+        }
+
+        // Cart Drawer Slide Open / Close
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cartDrawer');
+            const backdrop = document.getElementById('cartBackdrop');
+            const content = document.getElementById('cartContent');
+
+            if (content.classList.contains('translate-x-full')) {
+                // Open Drawer
+                drawer.classList.remove('pointer-events-none');
+                backdrop.classList.remove('opacity-0', 'pointer-events-none');
+                backdrop.classList.add('opacity-100');
+                content.classList.remove('translate-x-full');
+            } else {
+                // Close Drawer
+                backdrop.classList.remove('opacity-100');
+                backdrop.classList.add('opacity-0', 'pointer-events-none');
+                content.classList.add('translate-x-full');
+                setTimeout(() => {
+                    drawer.classList.add('pointer-events-none');
+                }, 300);
+            }
+        }
+
+        // Coupons
+        function applyCoupon() {
+            const input = document.getElementById('couponInput').value.trim().toUpperCase();
+            if (input === 'WELCOME10') {
+                isCouponApplied = true;
+                document.getElementById('couponStatus').classList.remove('hidden');
+                document.getElementById('couponInput').value = '';
+                updateCartUI();
+                showToast('10% Discount Applied!');
+            } else {
+                showToast('Invalid Coupon Code (Try WELCOME10)', 'error');
+            }
+        }
+
+        function removeCoupon() {
+            isCouponApplied = false;
+            document.getElementById('couponStatus').classList.add('hidden');
+            updateCartUI();
+            showToast('Coupon removed');
+        }
+
+        function copyCouponCode(code) {
+            document.execCommand('copy');
+            showToast(`Copied ${code}! Paste at checkout.`);
+        }
+
+        // Place Order Trigger
+        function placeOrder() {
+            if (cart.length === 0) return;
+
+            const orderType = document.getElementById('orderTypeSelect').value;
+            showToast('🎉 Order placed successfully! Kitchen notified.', 'success');
+            
+            // Reset Cart
+            cart = [];
+            isCouponApplied = false;
+            document.getElementById('couponStatus').classList.add('hidden');
+            renderFoodGrid();
+            updateCartUI();
+            
+            setTimeout(() => {
+                toggleCartDrawer();
+            }, 1000);
+        }
+
+        function openThaliModal() {
+            renderThaliChoices();
+            document.getElementById('thaliModal').classList.remove('hidden');
+        }
+
+        function closeThaliModal() {
+            document.getElementById('thaliModal').classList.add('hidden');
+        }
+
+        function selectThaliType(type) {
+            thaliState.type = type;
+            const vegBtn = document.getElementById('thaliTypeVeg');
+            const nonVegBtn = document.getElementById('thaliTypeNonVeg');
+            const priceEl = document.getElementById('thaliTotalPrice');
+
+            if (type === 'VEG') {
+                vegBtn.classList.replace('border-stone-200', 'border-emerald-600');
+                vegBtn.classList.replace('bg-stone-50', 'bg-emerald-50');
+                vegBtn.classList.replace('text-stone-600', 'text-emerald-800');
+
+                nonVegBtn.classList.replace('border-stone-200', 'border-stone-200');
+                nonVegBtn.classList.replace('bg-red-50', 'bg-stone-50');
+                nonVegBtn.classList.replace('text-red-800', 'text-stone-600');
+                priceEl.innerText = '₹599';
+            } else {
+                nonVegBtn.classList.replace('border-stone-200', 'border-red-600');
+                nonVegBtn.classList.replace('bg-stone-50', 'bg-red-50');
+                nonVegBtn.classList.replace('text-stone-600', 'text-red-800');
+
+                vegBtn.classList.replace('border-emerald-600', 'border-stone-200');
+                vegBtn.classList.replace('bg-emerald-50', 'bg-stone-50');
+                vegBtn.classList.replace('text-emerald-800', 'text-stone-600');
+                priceEl.innerText = '₹699';
+            }
+            renderThaliChoices();
+        }
+
+        function renderThaliChoices() {
+            const isVeg = thaliState.type === 'VEG';
+            const container = document.getElementById('thaliChoicesContainer');
+
+            const starters = MENU_DATA.filter(i => i.category === 'Starters' && (isVeg ? i.isVeg : true)).slice(0, 3);
+            const curries = MENU_DATA.filter(i => i.category === 'Main Course' && (isVeg ? i.isVeg : true)).slice(0, 3);
+            const breads = MENU_DATA.filter(i => i.category === 'Indian Breads').slice(0, 3);
+            const rices = MENU_DATA.filter(i => i.category === 'Biryani & Rice').slice(0, 3);
+            const desserts = MENU_DATA.filter(i => i.category === 'Desserts').slice(0, 2);
+
+            // Auto select first choices if null
+            if (!thaliState.starter) thaliState.starter = starters[0]?.name;
+            if (!thaliState.curry) thaliState.curry = curries[0]?.name;
+            if (!thaliState.bread) thaliState.bread = breads[0]?.name;
+            if (!thaliState.rice) thaliState.rice = rices[0]?.name;
+            if (!thaliState.dessert) thaliState.dessert = desserts[0]?.name;
+
+            const makeGroup = (title, items, key) => `
+                <div>
+                    <label class="font-bold text-xs text-stone-500 uppercase tracking-wider block mb-2">${title}</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        ${items.map(item => `
+                            <button onclick="setThaliSelection('${key}', '${item.name}')" 
+                                class="p-2.5 rounded-xl border text-left text-xs font-semibold transition-all ${thaliState[key] === item.name ? 'border-saffron-600 bg-saffron-50 text-saffron-800 ring-2 ring-saffron-500/20' : 'border-stone-200 bg-white text-stone-700 hover:bg-stone-50'}">
+                                ${item.name}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = `
+                ${makeGroup('1. Choose Starter', starters, 'starter')}
+                ${makeGroup('2. Choose Main Curry', curries, 'curry')}
+                ${makeGroup('3. Choose Indian Bread', breads, 'bread')}
+                ${makeGroup('4. Choose Rice Portion', rices, 'rice')}
+                ${makeGroup('5. Choose Sweet Dessert', desserts, 'dessert')}
+            `;
+        }
+
+        function setThaliSelection(key, name) {
+            thaliState[key] = name;
+            renderThaliChoices();
+        }
+
+        function addCustomThaliToCart() {
+            const price = thaliState.type === 'VEG' ? 599 : 699;
+            const name = `Custom ${thaliState.type === 'VEG' ? 'Veg' : 'Non-Veg'} Royal Thali (${thaliState.curry}, ${thaliState.bread})`;
+            
+            addToCart(null, name, price);
+            closeThaliModal();
+            showToast('Added Custom Royal Thali to order!');
+        }
+
+        function showToast(msg, type = 'info') {
+            const toast = document.getElementById('toastNotification');
+            const toastMsg = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.innerText = msg;
+            if (type === 'error') {
+                toastIcon.innerHTML = '<i class="fa-solid fa-circle-exclamation text-red-400"></i>';
+            } else {
+                toastIcon.innerHTML = '<i class="fa-solid fa-circle-check text-saffron-500"></i>';
+            }
+
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
